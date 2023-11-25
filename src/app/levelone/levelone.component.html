@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <!-- <div class="row" style="padding-top: 100px;">
+        <div class="col-md-5 ">
+            <div style="text-align: right;">
+                <img  *ngFor="let image of images" class = "sol" [@fade]="image.state" [src]="image.url" />
+                <img class="cronometro" [src]="timeLeft==10 ? '../assets/imagens/cronometro1.png' : 
+                                             timeLeft>=8 ? '../assets/imagens/cronometro2.png' :
+                                             timeLeft>=6 ? '../assets/imagens/cronometro3.png' :
+                                             timeLeft>=4 ? '../assets/imagens/cronometro4.png' :
+                                             timeLeft>=2 ? '../assets/imagens/cronometro5.png' :
+                                             timeLeft==1 ? '../assets/imagens/cronometro6.png' : '../assets/imagens/cronometro6.png'">
+            </div>
+        </div>
+    </div> 
+    <div class="row" style="margin-right: 50px;"> 
+        <div class="col-md-6 numeros" ><span>{{numero1}} {{operatorarray[contador-1]? "+" : "-"}} {{numero2}}</span><span style="padding-left: 6px;"> =</span>  </div>
+        <div class="col-md-2" style="width: 5%;"><input [(ngModel)]="resposta" type="text" class="form-control"></div>
+        <div class="col-md-4"><button class="btn btn-primary" (click)="calculo()">OK</button></div>
+    </div> -->
+    <div>
+        <img   class = "sol" [src]="personagemUrl" />
+        <img style="top: 23%; width: 11%; left: 9.5%;" class = "sol" [src]="'../assets/imagens/nome.png'"><span class="nomecrianca">{{nomeCrianca}}</span>
+    </div>
+    <div>
+        <img   class = "pont" [src]="'../assets/imagens/pontuacao2.png'" /><span class="ponttext">Pontuação: {{pontuacao}}</span>
+    </div>
+    <div>
+        <div style="text-align: center;">
+            <img class = "preview" [src]="changePreview()">
+        </div>
+        <div style="position: absolute;bottom: 0; left: 33%;" class="col-md-12 displaydiv">
+            <div class="questaotitle ">QUESTAO {{contador}}</div>
+            <div class="numeros" style="margin-right: 5%;"><span>{{numero1}} {{operatorarray[contador-1]? "+" : "-"}} {{numero2}}</span><span style="padding-left: 6px;"> =</span>  </div>
+            <div style="width: 20%;"><input [(ngModel)]="resposta" type="text" class="form-control"></div>
+        </div> 
+        <div style="position: absolute;bottom: 5%; right: 27%;"><button class="btn btn-primary" (click)="calculo()"><span class="btnok">Próximo</span></button></div>
+    </div>
+</div>

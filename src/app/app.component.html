@@ -1,0 +1,10 @@
+<audio [src]="currentSong" autoplay loop>
+</audio>
+<div class="body" [ngStyle]="getImage()" >
+    <!-- <div class="header"> -->
+        <div *ngIf="levelatual>=1" class = "title">Nível {{levelatual}}</div>
+     <!-- </div> -->
+    <app-initial *ngIf="levelatual == 0 ; else level" (levelEmitter)="levelatual = 1"></app-initial>
+    <ng-template #level><app-levelone *ngIf="levelatual<5" (levelEmitter)="levelatual = $event"></app-levelone></ng-template>
+    <app-form *ngIf="levelatual>=5"></app-form></div>
+<router-outlet></router-outlet>
