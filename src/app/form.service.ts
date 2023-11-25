@@ -21,18 +21,10 @@ export class FormService {
 
   constructor() { }
 
-  erros: Erro[] = [];
   personagem = "";
   nome = "";
   songUrl: Subject<string> = new Subject<string>();
 
-  getErrors(erro:Erro[]): void {
-    this.erros = erro;
-  }
-
-  passErrors(): Erro[] {
-    return this.erros;
-  }
 
   getPersonagem(url: string, name :string): void{
     this.personagem = url;

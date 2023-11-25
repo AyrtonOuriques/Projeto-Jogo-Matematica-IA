@@ -41,6 +41,7 @@ export class LeveloneComponent implements OnInit{
     personagemUrl = "";
     nomeCrianca = "";
     pontuacao = 0;
+    end = false;
 
 
     constructor(private errorService: FormService) { }
@@ -57,40 +58,40 @@ export class LeveloneComponent implements OnInit{
       //console.log('OK button clicked! Entered text: ', this.resposta);
       if(this.operatorarray[this.contador - 1]){
         this.resultadoesperado = this.numero1 + this.numero2;
-        this.erros.push({
-          numero1: this.numero1,
-          numero2: this.numero2,
-          operator: "+",
-          resultado: this.resposta,
-          resultadoesperado: this.resultadoesperado,
-          margemdeerro: Math.abs(this.resultadoesperado - this.resposta),
-          levelatual: this.levelatual
-        })
         if (this.resultadoesperado == this.resposta){
           console.log("acertou");
           this.pontuacao += 1;
         }
         else{
           console.log("errou");
+          this.erros.push({
+            numero1: this.numero1,
+            numero2: this.numero2,
+            operator: "+",
+            resultado: this.resposta,
+            resultadoesperado: this.resultadoesperado,
+            margemdeerro: Math.abs(this.resultadoesperado - this.resposta),
+            levelatual: this.levelatual
+          })
         }
       }
       else{
         this.resultadoesperado = this.numero1 - this.numero2;
-        this.erros.push({
-          numero1: this.numero1,
-          numero2: this.numero2,
-          operator: "-",
-          resultado: this.resposta,
-          resultadoesperado: this.resultadoesperado,
-          margemdeerro: Math.abs(this.resultadoesperado - this.resposta),
-          levelatual: this.levelatual
-        })
         if (this.resultadoesperado == this.resposta){
           console.log("acertou");
           this.pontuacao += 1;
         }
         else{
           console.log("errou");
+          this.erros.push({
+            numero1: this.numero1,
+            numero2: this.numero2,
+            operator: "-",
+            resultado: this.resposta,
+            resultadoesperado: this.resultadoesperado,
+            margemdeerro: Math.abs(this.resultadoesperado - this.resposta),
+            levelatual: this.levelatual
+          })
         }
       }
       this.contador +=1;
@@ -100,15 +101,17 @@ export class LeveloneComponent implements OnInit{
     }
     //console.log(this.erros);
     this.resposta = undefined;
-    if (this.contador > 10){
+    if (this.contador > 10 && this.levelatual<5){
       console.log("proximo level")
       this.contador = 1;
       this.levelatual += 1;
       this.levelEmitter.emit(this.levelatual);
       if (this.levelatual == 5){
-        this.errorService.getErrors(this.erros);
+        this.end = true;
       }
-      this.operatorarray = this.generateOperatorArray();
+      else{
+        this.operatorarray = this.generateOperatorArray();
+      }
     }
     this.showNext();
     clearInterval(this.timer);
@@ -155,6 +158,10 @@ export class LeveloneComponent implements OnInit{
     this.levelatual == 2 ? '../assets/imagens/level2p.png' :
     this.levelatual == 3 ? '../assets/imagens/level3p.png' :
     this.levelatual >= 4 ? '../assets/imagens/level4p.png' : ""
+  }
+
+  reload(): void {
+    window.location.reload();
   }
 
   showNext() {

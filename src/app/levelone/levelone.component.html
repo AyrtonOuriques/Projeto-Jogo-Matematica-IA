@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div *ngIf="!end" class="container-fluid">
     <!-- <div class="row" style="padding-top: 100px;">
         <div class="col-md-5 ">
             <div style="text-align: right;">
@@ -21,18 +21,30 @@
         <img   class = "sol" [src]="personagemUrl" />
         <img style="top: 23%; width: 11%; left: 9.5%;" class = "sol" [src]="'../assets/imagens/nome.png'"><span class="nomecrianca">{{nomeCrianca}}</span>
     </div>
-    <div>
+    <div *ngIf="levelatual<5">
         <img   class = "pont" [src]="'../assets/imagens/pontuacao2.png'" /><span class="ponttext">Pontuação: {{pontuacao}}</span>
     </div>
     <div>
-        <div style="text-align: center;">
+        <div *ngIf="levelatual<5" style="text-align: center;">
             <img class = "preview" [src]="changePreview()">
         </div>
-        <div style="position: absolute;bottom: 0; left: 33%;" class="col-md-12 displaydiv">
+        <div style="position: fixed;bottom: 0; left: 33%;" class="col-md-12 displaydiv">
             <div class="questaotitle ">QUESTAO {{contador}}</div>
             <div class="numeros" style="margin-right: 5%;"><span>{{numero1}} {{operatorarray[contador-1]? "+" : "-"}} {{numero2}}</span><span style="padding-left: 6px;"> =</span>  </div>
             <div style="width: 20%;"><input [(ngModel)]="resposta" type="text" class="form-control"></div>
         </div> 
-        <div style="position: absolute;bottom: 5%; right: 27%;"><button class="btn btn-primary" (click)="calculo()"><span class="btnok">Próximo</span></button></div>
+        <div style="position: fixed;bottom: 5%; right: 27%;"><button class="btn btn-primary" (click)="calculo()"><span class="btnok">Próximo</span></button></div>
     </div>
 </div>
+<div  *ngIf="end">
+    <div class = "erros">
+        <span class = "telafinaltexto">Você acertou {{40 - erros.length}} questões e errou {{erros.length}} questões</span>
+    </div>
+    <div class = "revisar btn btnend" (click)="end = false;">
+        <span class = "telafinaltexto">Revisar erros</span>
+    </div>
+    <div class = "revisar btn btnend" (click)="reload()">
+        <span class = "telafinaltexto">Sair</span>
+    </div>
+</div>
+

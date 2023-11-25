@@ -5,14 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LeveloneComponent } from './levelone/levelone.component';
 import { FormsModule } from '@angular/forms';
-import { FormComponent } from './form/form.component';
 import { InitialComponent } from './initial/initial.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LeveloneComponent,
-    FormComponent,
     InitialComponent
   ],
   imports: [

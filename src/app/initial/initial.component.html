@@ -20,10 +20,10 @@
     </div> 
     <div class="row">
         <div style="position: absolute;bottom: 0; left: 0;" class="col-md-2">
-            <img class = "eng btn" [src]="'../assets/imagens/eng.png'" (click)="settings = true;">
+            <img class = "eng btn btnimg" [src]="'../assets/imagens/eng.png'" (click)="settings = true;">
         </div> 
         <div style="position: absolute;bottom: 0; right: 8%;" class="displaydiv col-md-10">
-            <img class = "btn jogar" [src]="'../assets/imagens/jogar.png'" (click)="checkPlay()">
+            <img class = "btn btnimg jogar" [src]="'../assets/imagens/jogar.png'" (click)="checkPlay()">
         </div> 
     </div>
 </div>
@@ -40,7 +40,7 @@
     <div class = "titulomusicadiv btn">
         <span class = "titulopersonagem" (click)="passCurrentSong('../assets/imagens/musica2.mp3');">Música 2</span>
     </div>
-    <div class = "voltar btn">
+    <div class = "voltar btn btnimg">
         <span class = "titulopersonagem" (click)="settings = false;">Voltar</span>
     </div>
 </div>

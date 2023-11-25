@@ -27,7 +27,8 @@ export class AppComponent implements OnInit{
       this.levelatual === 1 ? 'url("../../assets/imagens/level1.jpeg")' : 
       this.levelatual === 2 ? 'url("../../assets/imagens/level2.jpeg")' : 
       this.levelatual === 3 ? 'url("../../assets/imagens/level3.jpeg")' : 
-      this.levelatual === 4 ? 'url("../../assets/imagens/level4.jpeg")' : "none",
+      this.levelatual === 4 ? 'url("../../assets/imagens/level4.jpeg")' :
+      this.levelatual === 5 ? 'url("../../assets/imagens/background.jpeg")' : "none",
       'transition': 'background-image 0.5s ease-in-out'
     };
   }

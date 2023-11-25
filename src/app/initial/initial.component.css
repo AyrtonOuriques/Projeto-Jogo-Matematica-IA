@@ -15,6 +15,20 @@
     border-radius: 40px;
 }
 
+.btn{
+    transition: all 0.3s ease 0s;
+}
+
+.btn:hover{
+    box-shadow: 0px 15px 20px rgba(11,101,198,1);;
+    transform: translateY(-5px);
+}
+
+.btnimg:hover{
+    box-shadow: 0px 0px 0px rgba(11,101,198,1);;
+    transform: translateY(-5px);
+}
+
 .displayimg{
     width: 50%;
     height: auto;
@@ -55,7 +69,6 @@
     width: 50%;
     margin-top: 5%;
     background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(212,211,218,1) 100%);
-    border: ridge;
     border-radius: 100em/3em;
     margin-left: 25%;
 }
