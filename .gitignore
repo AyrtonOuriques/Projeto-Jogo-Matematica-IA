@@ -30,11 +30,14 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
+/.firebase
 .sass-cache/
 /connect.lock
 /coverage
 /libpeerconnection.log
 testem.log
+.firebaserc
+firebase.json
 /typings
 
 # System files

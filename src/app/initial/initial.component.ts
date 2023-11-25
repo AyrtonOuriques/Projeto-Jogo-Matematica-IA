@@ -48,10 +48,12 @@ export class InitialComponent {
   trigger = 0;
   displayUrl = '../assets/imagens/crianca1.jpeg';
   displayName = "Criança indígena";
+  currentSong = "../assets/imagens/musica1.mp3"
   settings = false;
   @Output() levelEmitter = new EventEmitter<number>();
 
   checkPlay(): void{
+    this.errorService.passCurrentSong(this.currentSong);
     this.trigger += 1;
     if (this.trigger == 2){
       this.errorService.getPersonagem(this.displayUrl, this.displayName);
@@ -60,6 +62,7 @@ export class InitialComponent {
   }
 
   passCurrentSong(song: string) : void{
+    this.currentSong = song;
     this.errorService.passCurrentSong(song);
   }
 

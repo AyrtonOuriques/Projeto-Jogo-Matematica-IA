@@ -9,7 +9,7 @@ import { FormService } from './form.service';
 export class AppComponent implements OnInit{
   title = 'app';
   levelatual = 0;
-  currentSong = "../assets/imagens/musica1.mp3" 
+  currentSong = "" 
 
   constructor(private errorService: FormService) { }
 
