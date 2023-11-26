@@ -33,7 +33,7 @@
             <div class="numeros" ><span>{{numero1}}</span><img class="icon" [src]="getIcons(0)"><span>  {{operatorarray[contador-1]? "+" : "-"}}  </span><span>{{numero2}}</span><img class="icon" [src]="getIcons(1)"><span style="padding-left: 6px;"> =</span>
             <input [(ngModel)]="resposta" type="text" class="form-control"></div>
         </div> 
-        <div style="position: fixed;bottom: 5%; right: 25%;"><button class="btn btn-primary" (click)="calculo()"><span class="btnok">Próximo</span></button></div>
+        <div style="position: fixed;bottom: 5%; right: 12%;"><button class="btn" (click)="calculo()"><span class="btnok">Próximo</span></button></div>
     </div>
 </div>
 <div  *ngIf="end">

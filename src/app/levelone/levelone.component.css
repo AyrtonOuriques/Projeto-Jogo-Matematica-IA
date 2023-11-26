@@ -80,7 +80,7 @@
 .btn{
   width: 150%;
   height: 6vw;
-  color:  rgba(11,101,198,1);
+  background-color:  rgba(11,101,198,1);
   border-radius: 40px;
   transition: all 0.3s ease 0s;
 }
