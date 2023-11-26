@@ -10,15 +10,55 @@ export class AppComponent implements OnInit{
   title = 'app';
   levelatual = 0;
   currentSong = "" 
+  isLoaded = false;
 
   constructor(private errorService: FormService) { }
 
   ngOnInit(): void {
+    this.preloadImages();
     this.errorService.getCurrentSong().subscribe((value) => {
       this.currentSong = value;
     });
   }
 
+
+  preloadImages() {
+    const images = [
+      '../../assets/imagens/background.jpeg',
+      '../../assets/imagens/level1.jpeg',
+      '../../assets/imagens/level2.jpeg',
+      '../../assets/imagens/level3.jpeg',
+      '../../assets/imagens/level4.jpeg',
+      '../../assets/imagens/crianca1.jpeg',
+      '../../assets/imagens/crianca2.jpeg',
+      '../../assets/imagens/crianca3.jpeg',
+      '../../assets/imagens/crianca4.jpeg',
+      '../../assets/imagens/crianca5.jpeg',
+      '../../assets/imagens/crianca6.jpeg',
+      '../../assets/imagens/crianca7.jpeg',
+      '../../assets/imagens/crianca8.jpeg',
+      '../../assets/imagens/level1p.png',
+      '../../assets/imagens/level2p.png',
+      '../../assets/imagens/level3p.png',
+      '../../assets/imagens/level4p.png'    
+    ];
+
+    let loadedImages = 0;
+
+    const checkIfAllImagesLoaded = () => {
+      loadedImages++;
+
+      if (loadedImages === images.length) {
+        this.isLoaded = true;
+      }
+    };
+
+    images.forEach((imageUrl) => {
+      const img = new Image();
+      img.src = imageUrl;
+      img.addEventListener('load', checkIfAllImagesLoaded);
+    });
+  }
 
   getImage(): any{
 
@@ -32,5 +72,7 @@ export class AppComponent implements OnInit{
       'transition': 'background-image 0.5s ease-in-out'
     };
   }
+
+  
 
 }

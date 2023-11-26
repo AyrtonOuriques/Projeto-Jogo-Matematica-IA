@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LeveloneComponent } from './levelone/levelone.component';
 import { FormsModule } from '@angular/forms';
 import { InitialComponent } from './initial/initial.component';
+import { MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { InitialComponent } from './initial/initial.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

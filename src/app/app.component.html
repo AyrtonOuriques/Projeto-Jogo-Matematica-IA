@@ -1,6 +1,7 @@
 <audio [src]="currentSong" autoplay loop>
 </audio>
-<div class="body" [ngStyle]="getImage()" >
+<div *ngIf="!isLoaded" class="spinner-overlay"><mat-spinner></mat-spinner> </div>
+<div class="body" *ngIf="isLoaded" [ngStyle]="getImage()" >
     <!-- <div class="header"> -->
         <div *ngIf="levelatual>=1" class = "title">Nível {{levelatual}}</div>
      <!-- </div> -->
