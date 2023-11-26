@@ -42,15 +42,23 @@ export class LeveloneComponent implements OnInit{
     nomeCrianca = "";
     pontuacao = 0;
     end = false;
+    icons = [
+    '../assets/imagens/icon1.png',
+    '../assets/imagens/icon2.png',
+    '../assets/imagens/icon3.png',
+    '../assets/imagens/icon4.png',
+    '../assets/imagens/icon5.png'
+    ];
+    currentIcons: string[] = [];
 
 
     constructor(private errorService: FormService) { }
 
     ngOnInit(): void {
+      this.currentIcons = [this.icons[Math.floor(Math.random() * 4)], this.icons[Math.floor(Math.random() * 4)]];
       [this.personagemUrl, this.nomeCrianca] = this.errorService.passPersonagem();
       this.levelEmitter.emit(this.levelatual);
       [this.numero1, this.numero2] = this.generateRandomNumbers(this.levelatual);
-      this.startTimer();
     }
 
   calculo(): void {
@@ -107,16 +115,14 @@ export class LeveloneComponent implements OnInit{
       this.levelatual += 1;
       this.levelEmitter.emit(this.levelatual);
       if (this.levelatual == 5){
+        this.levelEmitter.emit(-1);
         this.end = true;
       }
       else{
         this.operatorarray = this.generateOperatorArray();
       }
     }
-    this.showNext();
-    clearInterval(this.timer);
-    this.timeLeft = 10;
-    this.startTimer();
+    this.currentIcons = [this.icons[Math.floor(Math.random() * 4)], this.icons[Math.floor(Math.random() * 4)]];
     [this.numero1, this.numero2] = this.generateRandomNumbers(this.levelatual);
 
   }
@@ -158,6 +164,10 @@ export class LeveloneComponent implements OnInit{
     this.levelatual == 2 ? '../assets/imagens/level2p.png' :
     this.levelatual == 3 ? '../assets/imagens/level3p.png' :
     this.levelatual >= 4 ? '../assets/imagens/level4p.png' : ""
+  }
+
+  getIcons(index: number): string {
+    return this.currentIcons[index]
   }
 
   reload(): void {

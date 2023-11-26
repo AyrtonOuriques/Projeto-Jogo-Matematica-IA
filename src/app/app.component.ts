@@ -40,7 +40,12 @@ export class AppComponent implements OnInit{
       '../../assets/imagens/level1p.png',
       '../../assets/imagens/level2p.png',
       '../../assets/imagens/level3p.png',
-      '../../assets/imagens/level4p.png'    
+      '../../assets/imagens/level4p.png',
+      '../assets/imagens/icon1.png',
+      '../assets/imagens/icon2.png',
+      '../assets/imagens/icon3.png',
+      '../assets/imagens/icon4.png',
+      '../assets/imagens/icon5.png'   
     ];
 
     let loadedImages = 0;
@@ -67,8 +72,7 @@ export class AppComponent implements OnInit{
       this.levelatual === 1 ? 'url("../../assets/imagens/level1.jpeg")' : 
       this.levelatual === 2 ? 'url("../../assets/imagens/level2.jpeg")' : 
       this.levelatual === 3 ? 'url("../../assets/imagens/level3.jpeg")' : 
-      this.levelatual === 4 ? 'url("../../assets/imagens/level4.jpeg")' :
-      this.levelatual === 5 ? 'url("../../assets/imagens/background.jpeg")' : "none",
+      this.levelatual === 4 ? 'url("../../assets/imagens/level4.jpeg")' : 'url("../../assets/imagens/background.jpeg")',
       'transition': 'background-image 0.5s ease-in-out'
     };
   }
