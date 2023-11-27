@@ -35,7 +35,7 @@ export class AppComponent implements OnInit{
       '../../assets/imagens/crianca4.jpeg',
       '../../assets/imagens/crianca5.jpeg',
       '../../assets/imagens/crianca6.jpeg',
-      '../../assets/imagens/crianca7.png',
+      '../../assets/imagens/crianca7.jpeg',
       '../../assets/imagens/crianca8.png',
       '../../assets/imagens/level1p.png',
       '../../assets/imagens/level2p.png',
