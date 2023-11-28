@@ -129,16 +129,28 @@ export class LeveloneComponent implements OnInit{
 
   generateRandomNumbers(type : number): [number, number] {
     if (type == 1){
-      return [Math.floor(Math.random() * 9) + 1, Math.floor(Math.random() * 9) + 1]
+      const primeiroNumero = Math.floor(Math.random() * 9) + 1
+      if(!this.operatorarray[this.contador-1]){
+        return [primeiroNumero, Math.floor(Math.random() * primeiroNumero) + 1]
+      }
+      return [primeiroNumero, Math.floor(Math.random() * 9) + 1]
     }
     else if (type == 2){
-      return [Math.floor(Math.random() * 90) + 11, Math.floor(Math.random() * 9) + 1]
+      return [Math.floor(Math.random() * 80) + 10, Math.floor(Math.random() * 9) + 1]
     }
     else if (type == 3){
-      return [Math.floor(Math.random() * 40) + 11, Math.floor(Math.random() * 39) + 11]
+      const primeiroNumero = Math.floor(Math.random() * 40) + 10
+      if(!this.operatorarray[this.contador-1]){
+        return [primeiroNumero, Math.floor(Math.random() * primeiroNumero) + 1]
+      }
+      return [primeiroNumero, Math.floor(Math.random() * 39) + 10]
     }
     else if (type == 4){
-      return [Math.floor(Math.random() * 50) + 1, Math.floor(Math.random() * 49) + 1]
+      const primeiroNumero = Math.floor(Math.random() * 50) + 1
+      if(!this.operatorarray[this.contador-1]){
+        return [primeiroNumero, Math.floor(Math.random() * primeiroNumero) + 1]
+      }
+      return [primeiroNumero, Math.floor(Math.random() * 49) + 1]
     }
     return [0,0]
   }
