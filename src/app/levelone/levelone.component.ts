@@ -1,20 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { generate } from 'rxjs';
-import { trigger, style, animate, transition, state } from '@angular/animations';
 import { Erro, FormService } from '../form.service';
 
 @Component({
   selector: 'app-levelone',
   templateUrl: './levelone.component.html',
   styleUrl: './levelone.component.css',
-  animations: [
-    trigger('fade', [
-      state('show', style({ opacity: '1' })),
-      state('hide', style({ opacity: '0' })),
-      transition('show => hide', animate('1s')),
-      transition('hide => show', animate('1s')),
-    ]),
-  ]
 })
 export class LeveloneComponent implements OnInit{
     numero1 = 0;
@@ -26,18 +17,6 @@ export class LeveloneComponent implements OnInit{
     @Output() levelEmitter = new EventEmitter<number>();
     resultadoesperado?: number;
     erros: Erro[] = [];
-    timeLeft: number = 10;
-    timer: any;
-    images = [
-      {
-        url: '../assets/imagens/solacordado.png',
-        state: 'show',
-      },
-      {
-        url: '../assets/imagens/soldormindo.png',
-        state: 'hide',
-      }
-    ];
     personagemUrl = "";
     nomeCrianca = "";
     pontuacao = 0;
@@ -186,24 +165,6 @@ export class LeveloneComponent implements OnInit{
     window.location.reload();
   }
 
-  showNext() {
-    this.images[0].state = this.images[0].state === 'hide' ? 'show' : 'hide';
-    this.images[1].state = this.images[1].state === 'show' ? 'hide' : 'show';
-  }
-
-
-  startTimer() {
-    this.timer = setInterval(() => {
-      if(this.timeLeft > 0) {
-        this.timeLeft--;
-        if (this.timeLeft==5){
-          this.showNext();
-        }
-      } else {
-        this.timeLeft = 10;
-      }
-    },1000)
-  } 
   
 
 }
