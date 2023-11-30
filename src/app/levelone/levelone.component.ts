@@ -2,6 +2,12 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { generate } from 'rxjs';
 import { trigger, style, animate, transition, state } from '@angular/animations';
 import { Erro, FormService } from '../form.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+export interface Requisicao {
+  numeros: number[];
+}
+
 
 @Component({
   selector: 'app-levelone',
@@ -42,9 +48,11 @@ export class LeveloneComponent implements OnInit{
     nomeCrianca = "";
     pontuacao = 0;
     end = false;
+    resultsAnalized = false;
+    reviewNumbers: number[] = [];
+    requestInfo:any;
 
-
-    constructor(private errorService: FormService) { }
+    constructor(private errorService: FormService, private http: HttpClient) { }
 
     ngOnInit(): void {
       [this.personagemUrl, this.nomeCrianca] = this.errorService.passPersonagem();
@@ -54,7 +62,7 @@ export class LeveloneComponent implements OnInit{
     }
 
   calculo(): void {
-    if (this.resposta && !isNaN(+this.resposta)){            
+    if (this.resposta && !isNaN(+this.resposta)){       
       //console.log('OK button clicked! Entered text: ', this.resposta);
       if(this.operatorarray[this.contador - 1]){
         this.resultadoesperado = this.numero1 + this.numero2;
@@ -64,16 +72,16 @@ export class LeveloneComponent implements OnInit{
         }
         else{
           console.log("errou");
-          this.erros.push({
-            numero1: this.numero1,
-            numero2: this.numero2,
-            operator: "+",
-            resultado: this.resposta,
-            resultadoesperado: this.resultadoesperado,
-            margemdeerro: Math.abs(this.resultadoesperado - this.resposta),
-            levelatual: this.levelatual
-          })
         }
+        this.erros.push({
+          numero1: this.numero1,
+          numero2: this.numero2,
+          operator: "+",
+          resultado: this.resposta,
+          resultadoesperado: this.resultadoesperado,
+          margemdeerro: Math.abs(this.resultadoesperado - this.resposta),
+          levelatual: this.levelatual
+        })
       }
       else{
         this.resultadoesperado = this.numero1 - this.numero2;
@@ -101,17 +109,20 @@ export class LeveloneComponent implements OnInit{
     }
     //console.log(this.erros);
     this.resposta = undefined;
-    if (this.contador > 10 && this.levelatual<5){
+    if (this.contador > 10 && this.levelatual < 5) {
       console.log("proximo level")
       this.contador = 1;
       this.levelatual += 1;
       this.levelEmitter.emit(this.levelatual);
-      if (this.levelatual == 5){
+      if (this.levelatual == 5) {
         this.end = true;
       }
       else{
         this.operatorarray = this.generateOperatorArray();
       }
+    }
+    if(this.end) {
+      this.analizeResults();
     }
     this.showNext();
     clearInterval(this.timer);
@@ -134,7 +145,53 @@ export class LeveloneComponent implements OnInit{
     else if (type == 4){
       return [Math.floor(Math.random() * 50) + 1, Math.floor(Math.random() * 49) + 1]
     }
-    return [0,0]
+    //console.log(this.erros);
+    return this.generateReviewQuestion()
+  }
+
+  generateReviewQuestion(): [number, number] {
+
+    let reviewQuestion: [number, number] = [0, 0];
+    let a, b = 0;
+
+    if(!this.resultsAnalized) {
+      this.analizeResults();
+      this.resultsAnalized = true;
+    }
+
+    if(this.reviewNumbers.length == 0) {
+      this.resultsAnalized = false;
+    } else {
+      a = this.reviewNumbers.pop() || 0;
+      b = this.reviewNumbers.pop() || 0;
+      reviewQuestion = [a, b];
+    }
+
+    return reviewQuestion;
+  }
+
+  analizeResults() {
+    this.getPrediction();  
+  }
+
+  getPrediction() {
+
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', '*/*');
+    headers.append('Accept-Encoding', 'gzip, deflate, br');
+    headers.append('Connection', 'keep-alive')
+    
+    try {
+      this.http.post<Requisicao>('http://localhost:8081/api/predict', this.erros, { headers: headers}).subscribe((response) =>{
+        this.reviewNumbers = [...response.numeros];
+        console.log(response);
+        console.log(this.reviewNumbers);
+      })
+    } catch (error) {
+      console.error(error)
+      throw error;  
+    }
   }
 
   generateOperatorArray(): number[] {
