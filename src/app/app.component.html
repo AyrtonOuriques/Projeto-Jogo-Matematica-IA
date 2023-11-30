@@ -2,9 +2,7 @@
 </audio>
 <div *ngIf="!isLoaded" class="spinner-overlay"><mat-spinner></mat-spinner> </div>
 <div class="body" *ngIf="isLoaded" [ngStyle]="getImage()" >
-    <!-- <div class="header"> -->
-        <div *ngIf="levelatual>=1" class = "title">Nível {{levelatual}}</div>
-     <!-- </div> -->
+    <div *ngIf="levelatual>=1" class = "title">Nível {{levelatual}}</div>
     <app-initial *ngIf="levelatual == 0 ; else level" (levelEmitter)="levelatual = 1"></app-initial>
     <ng-template #level><app-levelone (levelEmitter)="levelatual = $event"></app-levelone></ng-template>
 <router-outlet></router-outlet>

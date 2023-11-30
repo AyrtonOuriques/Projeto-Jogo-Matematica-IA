@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { generate } from 'rxjs';
-import { trigger, style, animate, transition, state } from '@angular/animations';
 import { Erro, FormService } from '../form.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -13,14 +12,6 @@ export interface Requisicao {
   selector: 'app-levelone',
   templateUrl: './levelone.component.html',
   styleUrl: './levelone.component.css',
-  animations: [
-    trigger('fade', [
-      state('show', style({ opacity: '1' })),
-      state('hide', style({ opacity: '0' })),
-      transition('show => hide', animate('1s')),
-      transition('hide => show', animate('1s')),
-    ]),
-  ]
 })
 export class LeveloneComponent implements OnInit{
     numero1 = 0;
@@ -32,33 +23,29 @@ export class LeveloneComponent implements OnInit{
     @Output() levelEmitter = new EventEmitter<number>();
     resultadoesperado?: number;
     erros: Erro[] = [];
-    timeLeft: number = 10;
-    timer: any;
-    images = [
-      {
-        url: '../assets/imagens/solacordado.png',
-        state: 'show',
-      },
-      {
-        url: '../assets/imagens/soldormindo.png',
-        state: 'hide',
-      }
-    ];
     personagemUrl = "";
     nomeCrianca = "";
     pontuacao = 0;
     end = false;
     resultsAnalized = false;
     reviewNumbers: number[] = [];
-    requestInfo:any;
+    requestInfo: any;
+    icons = [
+    '../assets/imagens/icon1.png',
+    '../assets/imagens/icon2.png',
+    '../assets/imagens/icon3.png',
+    '../assets/imagens/icon4.png',
+    '../assets/imagens/icon5.png'
+    ];
+    currentIcons: string[] = [];
 
     constructor(private errorService: FormService, private http: HttpClient) { }
 
     ngOnInit(): void {
+      this.currentIcons = [this.icons[Math.floor(Math.random() * 4)], this.icons[Math.floor(Math.random() * 4)]];
       [this.personagemUrl, this.nomeCrianca] = this.errorService.passPersonagem();
       this.levelEmitter.emit(this.levelatual);
       [this.numero1, this.numero2] = this.generateRandomNumbers(this.levelatual);
-      this.startTimer();
     }
 
   calculo(): void {
@@ -114,7 +101,8 @@ export class LeveloneComponent implements OnInit{
       this.contador = 1;
       this.levelatual += 1;
       this.levelEmitter.emit(this.levelatual);
-      if (this.levelatual == 5) {
+      if (this.levelatual == 5){
+        this.levelEmitter.emit(-1);
         this.end = true;
       }
       else{
@@ -124,26 +112,34 @@ export class LeveloneComponent implements OnInit{
     if(this.end) {
       this.analizeResults();
     }
-    this.showNext();
-    clearInterval(this.timer);
-    this.timeLeft = 10;
-    this.startTimer();
+    this.currentIcons = [this.icons[Math.floor(Math.random() * 4)], this.icons[Math.floor(Math.random() * 4)]];
     [this.numero1, this.numero2] = this.generateRandomNumbers(this.levelatual);
-
   }
 
   generateRandomNumbers(type : number): [number, number] {
     if (type == 1){
-      return [Math.floor(Math.random() * 9) + 1, Math.floor(Math.random() * 9) + 1]
+      const primeiroNumero = Math.floor(Math.random() * 9) + 1
+      if(!this.operatorarray[this.contador-1]){
+        return [primeiroNumero, Math.floor(Math.random() * primeiroNumero) + 1]
+      }
+      return [primeiroNumero, Math.floor(Math.random() * 9) + 1]
     }
     else if (type == 2){
-      return [Math.floor(Math.random() * 90) + 11, Math.floor(Math.random() * 9) + 1]
+      return [Math.floor(Math.random() * 80) + 10, Math.floor(Math.random() * 9) + 1]
     }
     else if (type == 3){
-      return [Math.floor(Math.random() * 40) + 11, Math.floor(Math.random() * 39) + 11]
+      const primeiroNumero = Math.floor(Math.random() * 40) + 10
+      if(!this.operatorarray[this.contador-1]){
+        return [primeiroNumero, Math.floor(Math.random() * primeiroNumero) + 1]
+      }
+      return [primeiroNumero, Math.floor(Math.random() * 39) + 10]
     }
     else if (type == 4){
-      return [Math.floor(Math.random() * 50) + 1, Math.floor(Math.random() * 49) + 1]
+      const primeiroNumero = Math.floor(Math.random() * 50) + 1
+      if(!this.operatorarray[this.contador-1]){
+        return [primeiroNumero, Math.floor(Math.random() * primeiroNumero) + 1]
+      }
+      return [primeiroNumero, Math.floor(Math.random() * 49) + 1]
     }
     //console.log(this.erros);
     return this.generateReviewQuestion()
@@ -232,28 +228,14 @@ export class LeveloneComponent implements OnInit{
     this.levelatual >= 4 ? '../assets/imagens/level4p.png' : ""
   }
 
+  getIcons(index: number): string {
+    return this.currentIcons[index]
+  }
+
   reload(): void {
     window.location.reload();
   }
 
-  showNext() {
-    this.images[0].state = this.images[0].state === 'hide' ? 'show' : 'hide';
-    this.images[1].state = this.images[1].state === 'show' ? 'hide' : 'show';
-  }
-
-
-  startTimer() {
-    this.timer = setInterval(() => {
-      if(this.timeLeft > 0) {
-        this.timeLeft--;
-        if (this.timeLeft==5){
-          this.showNext();
-        }
-      } else {
-        this.timeLeft = 10;
-      }
-    },1000)
-  } 
   
 
 }

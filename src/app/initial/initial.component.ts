@@ -36,7 +36,7 @@ export class InitialComponent {
       name: "Criança ribeirinha"
     },
     {
-      url: '../assets/imagens/crianca7.png',
+      url: '../assets/imagens/crianca7.jpeg',
       name: "Criança guerreira"
     },
     {
