@@ -1,6 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { generate } from 'rxjs';
 import { Erro, FormService } from '../form.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+export interface Requisicao {
+  numeros: number[];
+}
+
 
 @Component({
   selector: 'app-levelone',
@@ -21,6 +27,9 @@ export class LeveloneComponent implements OnInit{
     nomeCrianca = "";
     pontuacao = 0;
     end = false;
+    resultsAnalized = false;
+    reviewNumbers: number[] = [];
+    requestInfo: any;
     icons = [
     '../assets/imagens/icon1.png',
     '../assets/imagens/icon2.png',
@@ -30,8 +39,7 @@ export class LeveloneComponent implements OnInit{
     ];
     currentIcons: string[] = [];
 
-
-    constructor(private errorService: FormService) { }
+    constructor(private errorService: FormService, private http: HttpClient) { }
 
     ngOnInit(): void {
       this.currentIcons = [this.icons[Math.floor(Math.random() * 4)], this.icons[Math.floor(Math.random() * 4)]];
@@ -41,7 +49,7 @@ export class LeveloneComponent implements OnInit{
     }
 
   calculo(): void {
-    if (this.resposta && !isNaN(+this.resposta)){            
+    if (this.resposta && !isNaN(+this.resposta)){       
       //console.log('OK button clicked! Entered text: ', this.resposta);
       if(this.operatorarray[this.contador - 1]){
         this.resultadoesperado = this.numero1 + this.numero2;
@@ -51,16 +59,16 @@ export class LeveloneComponent implements OnInit{
         }
         else{
           console.log("errou");
-          this.erros.push({
-            numero1: this.numero1,
-            numero2: this.numero2,
-            operator: "+",
-            resultado: this.resposta,
-            resultadoesperado: this.resultadoesperado,
-            margemdeerro: Math.abs(this.resultadoesperado - this.resposta),
-            levelatual: this.levelatual
-          })
         }
+        this.erros.push({
+          numero1: this.numero1,
+          numero2: this.numero2,
+          operator: "+",
+          resultado: this.resposta,
+          resultadoesperado: this.resultadoesperado,
+          margemdeerro: Math.abs(this.resultadoesperado - this.resposta),
+          levelatual: this.levelatual
+        })
       }
       else{
         this.resultadoesperado = this.numero1 - this.numero2;
@@ -88,7 +96,7 @@ export class LeveloneComponent implements OnInit{
     }
     //console.log(this.erros);
     this.resposta = undefined;
-    if (this.contador > 10 && this.levelatual<5){
+    if (this.contador > 10 && this.levelatual < 5) {
       console.log("proximo level")
       this.contador = 1;
       this.levelatual += 1;
@@ -101,9 +109,11 @@ export class LeveloneComponent implements OnInit{
         this.operatorarray = this.generateOperatorArray();
       }
     }
+    if(this.end) {
+      this.analizeResults();
+    }
     this.currentIcons = [this.icons[Math.floor(Math.random() * 4)], this.icons[Math.floor(Math.random() * 4)]];
     [this.numero1, this.numero2] = this.generateRandomNumbers(this.levelatual);
-
   }
 
   generateRandomNumbers(type : number): [number, number] {
@@ -131,7 +141,68 @@ export class LeveloneComponent implements OnInit{
       }
       return [primeiroNumero, Math.floor(Math.random() * 49) + 1]
     }
-    return [0,0]
+    //console.log(this.erros);
+    return this.generateReviewQuestion()
+  }
+
+  generateReviewQuestion(): [number, number] {
+
+    let reviewQuestion: [number, number] = [0, 0];
+    let a, b = 0;
+    let temp = 0;
+
+    if(!this.resultsAnalized) {
+      this.analizeResults();
+      this.resultsAnalized = true;
+    }
+
+    if(this.reviewNumbers.length == 0) {
+      this.resultsAnalized = false;
+    } else {
+      a = Math.abs(this.reviewNumbers.pop() || 0);
+      b = Math.abs(this.reviewNumbers.pop() || 0);
+      if(a < b) {
+        temp = a;
+        a = b;
+        b = temp;
+      }
+
+      reviewQuestion = [a, b];
+    }
+
+    if(reviewQuestion[0] == 0) {
+      reviewQuestion[0] = Math.floor(Math.random() * 50) + 1
+    }
+
+    if(reviewQuestion[1] == 0) {
+      reviewQuestion[1] = Math.floor(Math.random() * 49) + 1
+    }
+
+    return reviewQuestion;
+  }
+
+  analizeResults() {
+    this.getPrediction();  
+  }
+
+  getPrediction() {
+
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', '*/*');
+    headers.append('Accept-Encoding', 'gzip, deflate, br');
+    headers.append('Connection', 'keep-alive')
+    
+    try {
+      this.http.post<Requisicao>('http://localhost:8081/api/predict', this.erros, { headers: headers}).subscribe((response) =>{
+        this.reviewNumbers = [...response.numeros];
+        console.log(response);
+        console.log(this.reviewNumbers);
+      })
+    } catch (error) {
+      console.error(error)
+      throw error;  
+    }
   }
 
   generateOperatorArray(): number[] {
