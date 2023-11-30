@@ -153,6 +153,7 @@ export class LeveloneComponent implements OnInit{
 
     let reviewQuestion: [number, number] = [0, 0];
     let a, b = 0;
+    let temp = 0;
 
     if(!this.resultsAnalized) {
       this.analizeResults();
@@ -162,9 +163,23 @@ export class LeveloneComponent implements OnInit{
     if(this.reviewNumbers.length == 0) {
       this.resultsAnalized = false;
     } else {
-      a = this.reviewNumbers.pop() || 0;
-      b = this.reviewNumbers.pop() || 0;
+      a = Math.abs(this.reviewNumbers.pop() || 0);
+      b = Math.abs(this.reviewNumbers.pop() || 0);
+      if(a < b) {
+        temp = a;
+        a = b;
+        b = temp;
+      }
+
       reviewQuestion = [a, b];
+    }
+
+    if(reviewQuestion[0] == 0) {
+      reviewQuestion[0] = Math.floor(Math.random() * 50) + 1
+    }
+
+    if(reviewQuestion[1] == 0) {
+      reviewQuestion[1] = Math.floor(Math.random() * 49) + 1
     }
 
     return reviewQuestion;
