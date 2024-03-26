@@ -27,7 +27,7 @@ export class LeveloneComponent implements OnInit{
     nomeCrianca = "";
     pontuacao = 0;
     end = false;
-    resultsAnalized = false;
+    resultsArrived = true;
     reviewNumbers: number[] = [];
     requestInfo: any;
     icons = [
@@ -104,13 +104,17 @@ export class LeveloneComponent implements OnInit{
       if (this.levelatual == 5){
         this.levelEmitter.emit(-1);
         this.end = true;
+        this.resultsArrived = false;
       }
       else{
         this.operatorarray = this.generateOperatorArray();
       }
     }
-    if(this.end) {
-      this.analizeResults();
+    else if (this.contador>5 && this.levelatual == 5){  
+      console.log("fim");
+      this.levelatual += 1;
+      this.end = true;
+      this.levelEmitter.emit(-1);
     }
     this.currentIcons = [this.icons[Math.floor(Math.random() * 4)], this.icons[Math.floor(Math.random() * 4)]];
     [this.numero1, this.numero2] = this.generateRandomNumbers(this.levelatual);
@@ -147,36 +151,18 @@ export class LeveloneComponent implements OnInit{
 
   generateReviewQuestion(): [number, number] {
 
-    let reviewQuestion: [number, number] = [0, 0];
+    let reviewQuestion: [number, number];
     let a, b = 0;
     let temp = 0;
-
-    if(!this.resultsAnalized) {
-      this.analizeResults();
-      this.resultsAnalized = true;
+ 
+    a = Math.abs(this.reviewNumbers.pop() || 0);
+    b = Math.abs(this.reviewNumbers.pop() || 0);
+    if(a < b) {
+      temp = a;
+      a = b;
+      b = temp;
     }
-
-    if(this.reviewNumbers.length == 0) {
-      this.resultsAnalized = false;
-    } else {
-      a = Math.abs(this.reviewNumbers.pop() || 0);
-      b = Math.abs(this.reviewNumbers.pop() || 0);
-      if(a < b) {
-        temp = a;
-        a = b;
-        b = temp;
-      }
-
-      reviewQuestion = [a, b];
-    }
-
-    if(reviewQuestion[0] == 0) {
-      reviewQuestion[0] = Math.floor(Math.random() * 50) + 1
-    }
-
-    if(reviewQuestion[1] == 0) {
-      reviewQuestion[1] = Math.floor(Math.random() * 49) + 1
-    }
+    reviewQuestion = [a, b];
 
     return reviewQuestion;
   }
@@ -198,6 +184,13 @@ export class LeveloneComponent implements OnInit{
         this.reviewNumbers = [...response.numeros];
         console.log(response);
         console.log(this.reviewNumbers);
+        for (let i = 9; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [this.reviewNumbers[i], this.reviewNumbers[j]] = [this.reviewNumbers[j], this.reviewNumbers[i]]; // Swap elements
+        }
+        console.log(this.reviewNumbers);
+        [this.numero1, this.numero2] = this.generateRandomNumbers(5);
+        this.resultsArrived = true;
       })
     } catch (error) {
       console.error(error)
